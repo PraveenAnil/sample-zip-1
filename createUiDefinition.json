@@ -1,0 +1,834 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/0.1.2-preview/CreateUIDefinition.MultiVm.json#",
+    "handler": "Microsoft.Azure.CreateUIDef",
+    "version": "0.1.2-preview",
+    "parameters": {
+        "basics": [
+            {
+                "name": "vmName",
+                "type": "Microsoft.Common.TextBox",
+                "label": "Virtual Machine name",
+                "toolTip": "The name of the Virtual Machine",
+                "constraints": {
+                    "required": true,
+                    "regex": "^[a-z0-9A-Z-]{3,79}$",
+                    "validationMessage": "The VM Name must be between 3 and 79 characters long and contain letters, numbers and hyphens only."
+                }
+            },
+            {
+                "name": "adminUsername",
+                "type": "Microsoft.Compute.UserNameTextBox",
+                "label": "Username",
+                "toolTip": "Linux VM user account name",
+                "osPlatform": "Linux",
+                "constraints": {
+                    "required": true
+                }
+            },
+            {
+                "name": "authenticationType",
+                "type": "Microsoft.Compute.CredentialsCombo",
+                "label": {
+                    "authenticationType": "Authentication type",
+                    "password": "Password",
+                    "confirmPassword": "Confirm password",
+                    "sshPublicKey": "SSH public key"
+                },
+                "toolTip": {
+                    "authenticationType": "Authentication Type for the Virtual Machine",
+                    "password": "Password for the Virtual Machine",
+                    "sshPublicKey": "SSH Public Key for the Virtual Machine"
+                },
+                "constraints": {
+                    "required": true
+                },
+                "options": {
+                    "hideConfirmation": false
+                },
+                "osPlatform": "Linux"
+            }
+        ],
+        "steps": [
+            {
+                "name": "VirtualMachineConfig",
+                "label": "Virtual Machine and Virtual Network Settings",
+                "subLabel": {
+                    "preValidation": "Configure the virtual machine's resources and virtual Network settings",
+                    "postValidation": "Done"
+                },
+                "bladeTitle": "Virtual Machine and Virtual Network Settings",
+                "elements": [
+                    {
+                        "name": "virtualMachineInfo",
+                        "type": "Microsoft.Common.InfoBox",
+                        "visible": true,
+                        "options": {
+                            "icon": "Info",
+                            "text": "This Azure Managed Application requires Virtual Machine of minimum 8 vCPU & 64GB RAM, so select a virtual machine size from the list provided below. If you want NVMe storage to be mapped to your virtual machine, please select a virtual machine size from Lsv2-series."
+                        }
+                    },
+                    {
+                        "name": "VmSize",
+                        "type": "Microsoft.Common.DropDown",
+                        "label": "Virtual machine size",
+                        "toolTip": "The size of virtual machine to provision",
+                        "constraints": {
+                            "allowedValues": [
+                                {
+                                    "label": "Standard_D16S_v3 - Max of 32 data disks",
+                                    "value": "Standard_D16s_v3"
+                                },
+                                {
+                                    "label": "Standard_D32S_v3 - Max of 32 data disks",
+                                    "value": "Standard_D32s_v3"
+                                },
+                                {
+                                    "label": "Standard_D48S_v3 - Max of 32 data disks",
+                                    "value": "Standard_D48s_v3"
+                                },
+                                {
+                                    "label": "Standard_D64S_v3 - Max of 32 data disks",
+                                    "value": "Standard_D64s_v3"
+                                },
+                                {
+                                    "label": "Standard_D16as_v4 - Max of 32 data disks",
+                                    "value": "Standard_D16as_v4"
+                                },
+                                {
+                                    "label": "Standard_D32as_v4 - Max of 32 data disks",
+                                    "value": "Standard_D32as_v4"
+                                },
+                                {
+                                    "label": "Standard_D48as_v4 - Max of 32 data disks",
+                                    "value": "Standard_D48as_v4"
+                                },
+                                {
+                                    "label": "Standard_D64as_v4 - Max of 32 data disks",
+                                    "value": "Standard_D64as_v4"
+                                },
+                                {
+                                    "label": "Standard_D96as_v4 - Max of 32 data disks",
+                                    "value": "Standard_D96as_v4"
+                                },
+                                {
+                                    "label": "Standard_D16ds_v4 - Max of 32 data disks",
+                                    "value": "Standard_D16ds_v4"
+                                },
+                                {
+                                    "label": "Standard_D32ds_v4 - Max of 32 data disks",
+                                    "value": "Standard_D32ds_v4"
+                                },
+                                {
+                                    "label": "Standard_D48ds_v4 - Max of 32 data disks",
+                                    "value": "Standard_D48ds_v4"
+                                },
+                                {
+                                    "label": "Standard_D64ds_v4 - Max of 32 data disks",
+                                    "value": "Standard_D64ds_v4"
+                                },
+                                {
+                                    "label": "Standard_D16s_v4 - Max of 32 data disks",
+                                    "value": "Standard_D16s_v4"
+                                },
+                                {
+                                    "label": "Standard_D32s_v4 - Max of 32 data disks",
+                                    "value": "Standard_D32s_v4"
+                                },
+                                {
+                                    "label": "Standard_D48s_v4 - Max of 32 data disks",
+                                    "value": "Standard_D48s_v4"
+                                },
+                                {
+                                    "label": "Standard_D64s_v4 - Max of 32 data disks",
+                                    "value": "Standard_D64s_v4"
+                                },
+                                {
+                                    "label": "Standard_E8as_v4 - Max of 16 data disks",
+                                    "value": "Standard_E8as_v4"
+                                },
+                                {
+                                    "label": "Standard_E16as_v4 - Max of 32 data disks",
+                                    "value": "Standard_E16as_v4"
+                                },
+                                {
+                                    "label": "Standard_E20as_v4 - Max of 32 data disks",
+                                    "value": "Standard_E20as_v4"
+                                },
+                                {
+                                    "label": "Standard_E32as_v4 - Max of 32 data disks",
+                                    "value": "Standard_E32as_v4"
+                                },
+                                {
+                                    "label": "Standard_E48as_v4 - Max of 32 data disks",
+                                    "value": "Standard_E48as_v4"
+                                },
+                                {
+                                    "label": "Standard_E64as_v4 - Max of 32 data disks",
+                                    "value": "Standard_E64as_v4"
+                                },
+                                {
+                                    "label": "Standard_E8ds_v4 - Max of 16 data disks",
+                                    "value": "Standard_E8ds_v4"
+                                },
+                                {
+                                    "label": "Standard_E16ds_v4 - Max of 32 data disks",
+                                    "value": "Standard_E16ds_v4"
+                                },
+                                {
+                                    "label": "Standard_E20ds_v4 - Max of 32 data disks",
+                                    "value": "Standard_E20ds_v4"
+                                },
+                                {
+                                    "label": "Standard_E32ds_v4 - Max of 32 data disks",
+                                    "value": "Standard_E32ds_v4"
+                                },
+                                {
+                                    "label": "Standard_E48ds_v4 - Max of 32 data disks",
+                                    "value": "Standard_E48ds_v4"
+                                },
+                                {
+                                    "label": "Standard_E64ds_v4 - Max of 32 data disks",
+                                    "value": "Standard_E64ds_v4"
+                                },
+                                {
+                                    "label": "Standard_E8s_v4 - Max of 16 data disks",
+                                    "value": "Standard_E8s_v4"
+                                },
+                                {
+                                    "label": "Standard_E16s_v4 - Max of 32 data disks",
+                                    "value": "Standard_E16s_v4"
+                                },
+                                {
+                                    "label": "Standard_E20s_v4 - Max of 32 data disks",
+                                    "value": "Standard_E20s_v4"
+                                },
+                                {
+                                    "label": "Standard_E32s_v4 - Max of 32 data disks",
+                                    "value": "Standard_E32s_v4"
+                                },
+                                {
+                                    "label": "Standard_E48s_v4 - Max of 32 data disks",
+                                    "value": "Standard_E48s_v4"
+                                },
+                                {
+                                    "label": "Standard_E64s_v4 - Max of 32 data disks",
+                                    "value": "Standard_E64s_v4"
+                                },
+                                {
+                                    "label": "Standard_E8s_v3 - Max of 16 data disks",
+                                    "value": "Standard_E8s_v3"
+                                },
+                                {
+                                    "label": "Standard_E16s_v3 - Max of 32 data disks",
+                                    "value": "Standard_E16s_v3"
+                                },
+                                {
+                                    "label": "Standard_E20s_v3 - Max of 32 data disks",
+                                    "value": "Standard_E20s_v3"
+                                },
+                                {
+                                    "label": "Standard_E32s_v3 - Max of 32 data disks",
+                                    "value": "Standard_E32s_v3"
+                                },
+                                {
+                                    "label": "Standard_E48s_v3 - Max of 32 data disks",
+                                    "value": "Standard_E48s_v3"
+                                },
+                                {
+                                    "label": "Standard_E64s_v3 - Max of 32 data disks",
+                                    "value": "Standard_E64s_v3"
+                                },
+                                {
+                                    "label": "Standard_L8s_v2 - Max of 16 data disks",
+                                    "value": "Standard_L8s_v2"
+                                },
+                                {
+                                    "label": "Standard_L16s_v2 - Max of 32 data disks",
+                                    "value": "Standard_L16s_v2"
+                                },
+                                {
+                                    "label": "Standard_L32s_v2 - Max of 32 data disks",
+                                    "value": "Standard_L32s_v2"
+                                },
+                                {
+                                    "label": "Standard_L48s_v2 - Max of 32 data disks",
+                                    "value": "Standard_L48s_v2"
+                                },
+                                {
+                                    "label": "Standard_L64s_v2 - Max of 32 data disks",
+                                    "value": "Standard_L64s_v2"
+                                }
+                            ],
+                            "required": true
+                        },
+                        "visible": true
+                    },
+                    {
+                        "name": "virtualNetwork",
+                        "type": "Microsoft.Network.VirtualNetworkCombo",
+                        "label": {
+                            "virtualNetwork": "Virtual network",
+                            "subnets": "Subnets"
+                        },
+                        "toolTip": {
+                            "virtualNetwork": "Name of the virtual network",
+                            "subnets": "Subnets for the virtual network"
+                        },
+                        "defaultValue": {
+                            "name": "VirtualNetwork",
+                            "addressPrefixSize": "/16"
+                        },
+                        "constraints": {
+                            "minAddressPrefixSize": "/16"
+                        },
+                        "subnets": {
+                            "subnet1": {
+                                "label": "Subnet",
+                                "defaultValue": {
+                                    "name": "default",
+                                    "addressPrefixSize": "/24"
+                                },
+                                "constraints": {
+                                    "minAddressPrefixSize": "/24",
+                                    "minAddressCount": 12,
+                                    "requireContiguousAddresses": false
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "diskConfiguration",
+                "label": "Data Disk Configuration",
+                "subLabel": {
+                    "preValidation": "Configure Data Disk settings for your Virtual Machine",
+                    "postValidation": "Done"
+                },
+                "bladeTitle": "Data Disk Configuration",
+                "elements": [
+                    {
+                        "name": "dataDiskInfo",
+                        "type": "Microsoft.Common.InfoBox",
+                        "visible": true,
+                        "options": {
+                            "icon": "Info",
+                            "text": "This Azure Managed Application requires atleast one SSD data disk, you can provide the details below. If you need to add any other types of disks to go with it, please select option 'yes' for additional disk and provide the details there."
+                        }
+                    },
+                    {
+                        "name": "dataDiskSku",
+                        "type": "Microsoft.Common.DropDown",
+                        "label": "Data Disk SKU",
+                        "defaultValue": "Standard SSD (locally-reduntant storage)",
+                        "toolTip": "Select the Mandatory Data Disk SKU",
+                        "constraints": {
+                            "allowedValues": [
+                                {
+                                    "label": "Standard SSD (locally-reduntant storage)",
+                                    "value": "StandardSSD_LRS"
+                                },
+                                {
+                                    "label": "Premium SSD (locally-reduntant storage)",
+                                    "value": "Premium_LRS"
+                                }
+                            ],
+                            "required": true
+                        },
+                        "visible": true
+                    },
+                    {
+                        "name": "dataDiskSize",
+                        "type": "Microsoft.Common.DropDown",
+                        "label": "Data Disk Size in GB",
+                        "toolTip": "Select the size of the Mandatory Data Disk in GB",
+                        "constraints": {
+                            "allowedValues": [
+                                {
+                                    "label": "4 GiB",
+                                    "value": "4"
+                                },
+                                {
+                                    "label": "8 GiB",
+                                    "value": "8"
+                                },
+                                {
+                                    "label": "16 GiB",
+                                    "value": "16"
+                                },
+                                {
+                                    "label": "32 GiB",
+                                    "value": "32"
+                                },
+                                {
+                                    "label": "64 GiB",
+                                    "value": "64"
+                                },
+                                {
+                                    "label": "128 GiB",
+                                    "value": "128"
+                                },
+                                {
+                                    "label": "256 GiB",
+                                    "value": "256"
+                                },
+                                {
+                                    "label": "512 GiB",
+                                    "value": "512"
+                                },
+                                {
+                                    "label": "1024 GiB",
+                                    "value": "1024"
+                                },
+                                {
+                                    "label": "2048 GiB",
+                                    "value": "2048"
+                                },
+                                {
+                                    "label": "4096 GiB",
+                                    "value": "4096"
+                                },
+                                {
+                                    "label": "8192 GiB",
+                                    "value": "8192"
+                                },
+                                {
+                                    "label": "16384 GiB",
+                                    "value": "16384"
+                                },
+                                {
+                                    "label": "32767 GiB",
+                                    "value": "32767"
+                                }
+                            ],
+                            "required": true
+                        },
+                        "visible": true
+                    },
+                    {
+                        "name": "numberOfDisks",
+                        "type": "Microsoft.Common.TextBox",
+                        "defaultValue": "1",
+                        "label": "Number of Data Disk",
+                        "toolTip": "Number of Data Disks to deploy, this Managed application needs atleast 1 disk",
+                        "constraints": {
+                            "required": true,
+                            "regex": "[^0]",
+                            "validationMessage": "The data disk count should be atleast 1."
+                        }
+                    },
+                    {
+                        "name": "additionalDataDisk",
+                        "type": "Microsoft.Common.OptionsGroup",
+                        "label": "Additional Data Disk",
+                        "defaultValue": "No",
+                        "toolTip": "Select 'Yes' if you want to attach more data disks with different configuration than the disk mentioned above",
+                        "constraints": {
+                          "allowedValues": [
+                            {
+                              "label": "No",
+                              "value": "No"
+                            },
+                            {
+                              "label": "Yes",
+                              "value": "Yes"
+                            }
+                          ],
+                          "required": true
+                        },
+                        "visible": true
+                    },
+                    {
+                        "name": "additionalDataDiskSku",
+                        "type": "Microsoft.Common.DropDown",
+                        "label": "Additional Data Disk SKU",
+                        "toolTip": "Select the additional Data Disk SKU",
+                        "multiselect": true,
+                        "selectAll": true,
+                        "constraints": {
+                            "allowedValues": [
+                                {
+                                    "label": "Standard HDD (locally-reduntant storage)",
+                                    "value": "Standard_LRS"
+                                },
+                                {
+                                    "label": "Standard SSD (locally-reduntant storage)",
+                                    "value": "StandardSSD_LRS"
+                                },
+                                {
+                                    "label": "Premium SSD (locally-reduntant storage)",
+                                    "value": "Premium_LRS"
+                                },
+                                {
+                                    "label": "Ultra Disk (locally-reduntant storage)",
+                                    "value": "UltraSSD_LRS"
+                                }
+                            ],
+                            "required": true
+                        },
+                        "visible": "[equals(steps('diskConfiguration').additionalDataDisk, 'Yes')]"
+                    },
+                    {
+                        "name": "additionalSHDDDataDiskSize",
+                        "type": "Microsoft.Common.DropDown",
+                        "label": "Additional Standard HDD Data Disk Size in GB",
+                        "defaultValue": "32 GiB",
+                        "toolTip": "Select the size of the additional Standard HDD Data Disk in GB",
+                        "constraints": {
+                            "allowedValues": [
+                                {
+                                    "label": "4 GiB",
+                                    "value": "4"
+                                },
+                                {
+                                    "label": "8 GiB",
+                                    "value": "8"
+                                },
+                                {
+                                    "label": "16 GiB",
+                                    "value": "16"
+                                },
+                                {
+                                    "label": "32 GiB",
+                                    "value": "32"
+                                },
+                                {
+                                    "label": "64 GiB",
+                                    "value": "64"
+                                },
+                                {
+                                    "label": "128 GiB",
+                                    "value": "128"
+                                },
+                                {
+                                    "label": "256 GiB",
+                                    "value": "256"
+                                },
+                                {
+                                    "label": "512 GiB",
+                                    "value": "512"
+                                },
+                                {
+                                    "label": "1024 GiB",
+                                    "value": "1024"
+                                },
+                                {
+                                    "label": "2048 GiB",
+                                    "value": "2048"
+                                },
+                                {
+                                    "label": "4096 GiB",
+                                    "value": "4096"
+                                },
+                                {
+                                    "label": "8192 GiB",
+                                    "value": "8192"
+                                },
+                                {
+                                    "label": "16384 GiB",
+                                    "value": "16384"
+                                },
+                                {
+                                    "label": "32767 GiB",
+                                    "value": "32767"
+                                }
+                            ],
+                            "required": true
+                        },
+                        "visible": "[contains(steps('diskConfiguration').additionalDataDiskSku, 'Standard_LRS')]"
+                    },
+                    {
+                        "name": "additionalNumberOfSHDDDisks",
+                        "type": "Microsoft.Common.TextBox",
+                        "defaultValue": "1",
+                        "label": "Number of additional Standard HDD Data Disk",
+                        "toolTip": "Number of additional Standard HDD Data Disks to deploy",
+                        "visible": "[contains(steps('diskConfiguration').additionalDataDiskSku, 'Standard_LRS')]",
+                        "constraints": {
+                            "required": true,
+                            "regex": "[^0]",
+                            "validationMessage": "The data disk count should be atleast 1."
+                        }
+                    },
+                    {
+                        "name": "additionalSSSDDataDiskSize",
+                        "type": "Microsoft.Common.DropDown",
+                        "label": "Additional Standard SSD Data Disk Size in GB",
+                        "defaultValue": "32 GiB",
+                        "toolTip": "Select the size of the additional Standard SSD Data Disk in GB",
+                        "constraints": {
+                            "allowedValues": [
+                                {
+                                    "label": "4 GiB",
+                                    "value": "4"
+                                },
+                                {
+                                    "label": "8 GiB",
+                                    "value": "8"
+                                },
+                                {
+                                    "label": "16 GiB",
+                                    "value": "16"
+                                },
+                                {
+                                    "label": "32 GiB",
+                                    "value": "32"
+                                },
+                                {
+                                    "label": "64 GiB",
+                                    "value": "64"
+                                },
+                                {
+                                    "label": "128 GiB",
+                                    "value": "128"
+                                },
+                                {
+                                    "label": "256 GiB",
+                                    "value": "256"
+                                },
+                                {
+                                    "label": "512 GiB",
+                                    "value": "512"
+                                },
+                                {
+                                    "label": "1024 GiB",
+                                    "value": "1024"
+                                },
+                                {
+                                    "label": "2048 GiB",
+                                    "value": "2048"
+                                },
+                                {
+                                    "label": "4096 GiB",
+                                    "value": "4096"
+                                },
+                                {
+                                    "label": "8192 GiB",
+                                    "value": "8192"
+                                },
+                                {
+                                    "label": "16384 GiB",
+                                    "value": "16384"
+                                },
+                                {
+                                    "label": "32767 GiB",
+                                    "value": "32767"
+                                }
+                            ],
+                            "required": true
+                        },
+                        "visible": "[contains(steps('diskConfiguration').additionalDataDiskSku, 'StandardSSD_LRS')]"
+                    },
+                    {
+                        "name": "additionalNumberOfSSSDDisks",
+                        "type": "Microsoft.Common.TextBox",
+                        "defaultValue": "1",
+                        "label": "Number of additional Standard SSD Data Disk",
+                        "toolTip": "Number of additional Standard SSD Data Disks to deploy",
+                        "visible": "[contains(steps('diskConfiguration').additionalDataDiskSku, 'StandardSSD_LRS')]",
+                        "constraints": {
+                            "required": true,
+                            "regex": "[^0]",
+                            "validationMessage": "The data disk count should be atleast 1."
+                        }
+                    },
+                    {
+                        "name": "additionalPSSDDataDiskSize",
+                        "type": "Microsoft.Common.DropDown",
+                        "label": "Additional Premium SSD Data Disk Size in GB",
+                        "defaultValue": "32 GiB",
+                        "toolTip": "Select the size of the additional Premium SSD Data Disk in GB",
+                        "constraints": {
+                            "allowedValues": [
+                                {
+                                    "label": "4 GiB",
+                                    "value": "4"
+                                },
+                                {
+                                    "label": "8 GiB",
+                                    "value": "8"
+                                },
+                                {
+                                    "label": "16 GiB",
+                                    "value": "16"
+                                },
+                                {
+                                    "label": "32 GiB",
+                                    "value": "32"
+                                },
+                                {
+                                    "label": "64 GiB",
+                                    "value": "64"
+                                },
+                                {
+                                    "label": "128 GiB",
+                                    "value": "128"
+                                },
+                                {
+                                    "label": "256 GiB",
+                                    "value": "256"
+                                },
+                                {
+                                    "label": "512 GiB",
+                                    "value": "512"
+                                },
+                                {
+                                    "label": "1024 GiB",
+                                    "value": "1024"
+                                },
+                                {
+                                    "label": "2048 GiB",
+                                    "value": "2048"
+                                },
+                                {
+                                    "label": "4096 GiB",
+                                    "value": "4096"
+                                },
+                                {
+                                    "label": "8192 GiB",
+                                    "value": "8192"
+                                },
+                                {
+                                    "label": "16384 GiB",
+                                    "value": "16384"
+                                },
+                                {
+                                    "label": "32767 GiB",
+                                    "value": "32767"
+                                }
+                            ],
+                            "required": true
+                        },
+                        "visible": "[contains(steps('diskConfiguration').additionalDataDiskSku, 'Premium_LRS')]"
+                    },
+                    {
+                        "name": "additionalNumberOfPSSDDisks",
+                        "type": "Microsoft.Common.TextBox",
+                        "defaultValue": "1",
+                        "label": "Number of additional Premium SSD Data Disk",
+                        "toolTip": "Number of additional Premium SSD Data Disks to deploy",
+                        "visible": "[contains(steps('diskConfiguration').additionalDataDiskSku, 'Premium_LRS')]",
+                        "constraints": {
+                            "required": true,
+                            "regex": "[^0]",
+                            "validationMessage": "The data disk count should be atleast 1."
+                        }
+                    },
+                    {
+                        "name": "additionalUltraDataDiskSize",
+                        "type": "Microsoft.Common.DropDown",
+                        "label": "Additional Ultra Data Disk Size in GB",
+                        "defaultValue": "32 GiB",
+                        "toolTip": "Select the size of the additional Ultra Data Disk in GB",
+                        "constraints": {
+                            "allowedValues": [
+                                {
+                                    "label": "4 GiB",
+                                    "value": "4"
+                                },
+                                {
+                                    "label": "8 GiB",
+                                    "value": "8"
+                                },
+                                {
+                                    "label": "16 GiB",
+                                    "value": "16"
+                                },
+                                {
+                                    "label": "32 GiB",
+                                    "value": "32"
+                                },
+                                {
+                                    "label": "64 GiB",
+                                    "value": "64"
+                                },
+                                {
+                                    "label": "128 GiB",
+                                    "value": "128"
+                                },
+                                {
+                                    "label": "256 GiB",
+                                    "value": "256"
+                                },
+                                {
+                                    "label": "512 GiB",
+                                    "value": "512"
+                                },
+                                {
+                                    "label": "1024 GiB",
+                                    "value": "1024"
+                                },
+                                {
+                                    "label": "2048 GiB",
+                                    "value": "2048"
+                                },
+                                {
+                                    "label": "4096 GiB",
+                                    "value": "4096"
+                                },
+                                {
+                                    "label": "8192 GiB",
+                                    "value": "8192"
+                                },
+                                {
+                                    "label": "16384 GiB",
+                                    "value": "16384"
+                                },
+                                {
+                                    "label": "32767 GiB",
+                                    "value": "32767"
+                                }
+                            ],
+                            "required": true
+                        },
+                        "visible": "[contains(steps('diskConfiguration').additionalDataDiskSku, 'UltraSSD_LRS')]"
+                    },
+                    {
+                        "name": "additionalNumberOfUltraDisks",
+                        "type": "Microsoft.Common.TextBox",
+                        "defaultValue": "1",
+                        "label": "Number of additional Ultra Data Disk",
+                        "toolTip": "Number of additional Ultra Data Disks to deploy",
+                        "visible": "[contains(steps('diskConfiguration').additionalDataDiskSku, 'UltraSSD_LRS')]",
+                        "constraints": {
+                            "required": true,
+                            "regex": "[^0]",
+                            "validationMessage": "The data disk count should be atleast 1."
+                        }
+                    }
+                ]
+            }
+		],
+        "outputs": {
+
+            "location": "[location()]",
+            "vmName": "[basics('vmName')]",
+            "adminUsername": "[basics('adminUsername')]",
+            "authenticationType": "[basics('authenticationType').authenticationType]",
+            "adminPasswordOrKey": "[coalesce(basics('authenticationType').password, basics('authenticationType').sshPublicKey)]",
+    
+            "VmSize": "[steps('VirtualMachineConfig').VmSize]",
+
+            "virtualNetworkNewOrExisting": "[steps('VirtualMachineConfig').virtualNetwork.newOrExisting]",
+            "virtualNetworkName": "[steps('VirtualMachineConfig').virtualNetwork.name]",
+            "addressPrefixes": "[steps('VirtualMachineConfig').virtualNetwork.addressPrefixes]",
+            "subnetName": "[steps('VirtualMachineConfig').virtualNetwork.subnets.subnet1.name]",
+            "subnetPrefix": "[steps('VirtualMachineConfig').virtualNetwork.subnets.subnet1.addressPrefix]",
+            "virtualNetworkResourceGroupName": "[steps('VirtualMachineConfig').virtualNetwork.resourceGroup]",
+
+            "dataDiskSku": "[steps('diskConfiguration').dataDiskSku]",
+            "dataDiskSize": "[steps('diskConfiguration').dataDiskSize]",
+            "numberOfDisks": "[steps('diskConfiguration').numberOfDisks]",
+            "additionalDataDisk": "[steps('diskConfiguration').additionalDataDisk]",
+            "additionalDataDiskSku": "[steps('diskConfiguration').additionalDataDiskSku]",
+            "additionalSHDDDataDiskSize": "[steps('diskConfiguration').additionalSHDDDataDiskSize]",
+            "additionalNumberOfSHDDDisks": "[steps('diskConfiguration').additionalNumberOfSHDDDisks]",
+            "additionalSSSDDataDiskSize": "[steps('diskConfiguration').additionalSSSDDataDiskSize]",
+            "additionalNumberOfSSSDDisks": "[steps('diskConfiguration').additionalNumberOfSSSDDisks]",
+            "additionalPSSDDataDiskSize": "[steps('diskConfiguration').additionalPSSDDataDiskSize]",
+            "additionalNumberOfPSSDDisks": "[steps('diskConfiguration').additionalNumberOfPSSDDisks]",
+            "additionalUltraDataDiskSize": "[steps('diskConfiguration').additionalUltraDataDiskSize]",
+            "additionalNumberOfUltraDisks": "[steps('diskConfiguration').additionalNumberOfUltraDisks]"
+        }
+    }
+}
