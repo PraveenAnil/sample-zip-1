@@ -36,7 +36,7 @@ jobs:
         uses: papeloto/action-zip@v1
         with:
           files: StorOne-ManagedApplication/
-          recursive: false
+          recursive: true
           dest: StorOne-ManagedApplication.zip
       
       - name: Upload Release
