@@ -22,4 +22,5 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           artifacts: "assets-for-download.zip"
-          tag: "zip1"  
+          tag: "zip1"
+          replacesArtifacts: "true"
