@@ -36,3 +36,4 @@ jobs:
           allowUpdates: "true"
           prerelease: "true"
           omitPrereleaseDuringUpdate: "true"
+          token: ${{ secrets.GITHUB_TOKEN }}
