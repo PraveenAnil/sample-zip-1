@@ -24,3 +24,4 @@ jobs:
           artifacts: "assets-for-download.zip"
           tag: "zip1"
           replacesArtifacts: "true"
+          allowUpdates: "true"
