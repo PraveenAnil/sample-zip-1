@@ -22,6 +22,6 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           artifacts: "assets-for-download.zip"
-          tag: "zip1"
+          tag: "zip2"
           replacesArtifacts: "true"
           allowUpdates: "true"
