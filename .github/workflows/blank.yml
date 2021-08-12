@@ -16,11 +16,11 @@ jobs:
       - name: step 2 - Add artifacts to publish to the temp folder
         run: |
           cd downloads
-          cp /StorOne-ManagedApplication/* downloads
           echo 'alpha'    > alpha.html
           echo 'bravo'    > bravo.html
           echo 'charlie'  > charlie.html
           cd ..
+          ls
     
       - name: Step 3 - Use the Upload Artifact GitHub Action
         uses: actions/upload-artifact@v2
