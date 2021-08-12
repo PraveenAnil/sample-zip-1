@@ -19,14 +19,7 @@ jobs:
         run: |
           ls
           
-      - name: Archive Release
-        uses: thedoctor0/zip-release@master
-        with: 
-          type: 'zip'
-          filename: 'StorOne-ManagedApplication1.zip'
-          exclusions: '*.git* /*node_modules/* .editorconfig R* c* m* StorOne-ManagedApplication/' 
-          name: assets-for-download
-          path: StorOne-ManagedApplication
+
           
       - name: step 2 - Add artifacts to publish to the temp folder
         run: |
