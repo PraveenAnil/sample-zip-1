@@ -17,3 +17,9 @@ jobs:
         with: 
           name: assets-for-download
           path: StorOne-ManagedApplication
+          
+      - name: Upload Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "assets-for-download.zip"
+          tag: "zip1"  
