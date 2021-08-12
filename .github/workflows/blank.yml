@@ -1,25 +1,28 @@
-name: MasterDeployCI
+name: Publish GitHub Actions Artifacts Example
+
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
+
 jobs:
-  build:
+       
+  archive-build-artifacts:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
-    - name: Zip Folder
-      run: zip -r release.zip . -x ".git/*" ".github/*"
-    - name: Release to Github
-      run: echo "Release"
-    - name: Create Release Folder
-      run: rsync -arv --exclude='.git/' --exclude='.github/' --exclude='.gitignore' . ./release
-    - name: Switch to Release Folder
-      run: |
-        cd release
-        ls -la
-    - name: Bump version and push tag
-      uses: anothrNick/github-tag-action@1.26.0
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        REPO_OWNER: PraveenAnil
+
+      - name: Step 1 - Create a temporary artifact downloads folder
+        run: mkdir downloads
+        
+      - name: step 2 - Add artifacts to publish to the temp folder
+        run: |
+          cd StorOne-ManagedApplication
+          echo 'alpha'    > alpha.html
+          echo 'bravo'    > bravo.html
+          echo 'charlie'  > charlie.html
+          cd ..
+    
+      - name: Step 3 - Use the Upload Artifact GitHub Action
+        uses: actions/upload-artifact@v2
+        with: 
+          name: assets-for-download
+          path: downloads
