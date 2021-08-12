@@ -24,7 +24,7 @@ jobs:
         with: 
           type: 'zip'
           filename: 'StorOne-ManagedApplication.zip'
-          exclusions: '*.git* /*node_modules/* .editorconfig R* c* m* StorOne-ManagedApplication' 
+          exclusions: '*.git* /*node_modules/* .editorconfig R* c* m* StorOne-ManagedApplication/' 
           name: assets-for-download
           path: StorOne-ManagedApplication
           
