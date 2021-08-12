@@ -34,3 +34,4 @@ jobs:
           tag: "zip2"
           replacesArtifacts: "true"
           allowUpdates: "true"
+          prerelease: "true"
