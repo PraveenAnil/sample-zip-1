@@ -28,4 +28,5 @@ jobs:
       with:
         artifacts: "release.zip"
         commit: "zip1"
+        tag: "zip1"
 
