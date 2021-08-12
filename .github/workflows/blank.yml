@@ -21,6 +21,10 @@ jobs:
           name: assets-for-download
           path: StorOne-ManagedApplication
           
+      - name: step 2 - Add artifacts to publish to the temp folder
+        run: |
+          ls
+          
       - name: Upload Release
         uses: ncipollo/release-action@v1
         with:
