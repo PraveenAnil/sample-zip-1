@@ -8,9 +8,17 @@ chrome_options.add_argument('--no-sandbox')
 driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, chrome_options=chrome_options )
 driver.get("https://portal.azure.com")
 
-username = "ba"
- 
+username = "replaceuser"
+password = "replacepass"
 # find the id or name or class of
 # username by inspecting on username input
 driver.find_element_by_name("loginfmt").send_keys(username)
+driver.find_element_by_id("idSIButton9").click()
+
+delay = 3 # seconds
+myElem = WebDriverWait(driver, delay).until(EC.presence_of_element_located((By.ID, 'i0118')))
+
+driver.find_element_by_name("passwd").send_keys(password)
+driver.find_element_by_id("idSIButton9").click()
+
    
