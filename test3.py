@@ -5,7 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-FIREFOXDRIVER_PATH = '/usr/local/bin/chromedriver'
+FIREFOXDRIVER_PATH = '/usr/local/bin/geckodriver'
 
 firefoxOptions = Options()
 firefoxOptions.add_argument('--start-maximized')
