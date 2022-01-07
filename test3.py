@@ -25,3 +25,5 @@ myElem = WebDriverWait(driver, delay).until(EC.presence_of_element_located((By.I
 driver.find_element_by_name("passwd").send_keys(password)
 WebDriverWait(driver, delay)
 driver.find_element_by_id("idSIButton9").click()
+
+driver.find_element_by_id("idSIButton9").send_keys(Keys.ENTER);
