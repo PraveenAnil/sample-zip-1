@@ -4,7 +4,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-
+import time
 FIREFOXDRIVER_PATH = '/usr/local/bin/geckodriver'
 
 firefoxOptions = Options()
@@ -24,6 +24,10 @@ myElem = WebDriverWait(driver, delay).until(EC.presence_of_element_located((By.I
 
 driver.find_element_by_name("passwd").send_keys(password)
 WebDriverWait(driver, delay)
+time.sleep(3)
 driver.find_element_by_id("idSIButton9").click()
 
 driver.find_element_by_id("idSIButton9").send_keys(Keys.ENTER);
+
+time.sleep(3)
+driver.find_element_by_id("idBtn_Back").click()
