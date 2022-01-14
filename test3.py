@@ -11,7 +11,7 @@ firefoxOptions = Options()
 firefoxOptions.add_argument('--start-maximized')
 driver = webdriver.Firefox(executable_path=FIREFOXDRIVER_PATH, options=firefoxOptions )
 driver.get("replacel")
-
+driver.maximize_window()
 username = "replaceus"
 password = "replacepa"
 # find the id or name or class of
