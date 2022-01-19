@@ -17,17 +17,11 @@ password = "replacepa"
 # find the id or name or class of
 # username by inspecting on username input
 driver.find_element_by_name("username").send_keys(username)
-driver.find_element_by_id("idSIButton9").click()
 
-delay = 10 # seconds
-#myElem = WebDriverWait(driver, delay).until(EC.presence_of_element_located((By.ID, 'i0118')))
 time.sleep(2)
 driver.find_element_by_name("password").send_keys(password)
-#WebDriverWait(driver, delay)
+
 time.sleep(2)
 driver.find_element_by_id("signin_button").click()
 
 driver.find_element_by_id("signin_button").send_keys(Keys.ENTER);
-
-time.sleep(2)
-driver.find_element_by_id("signin_button").click()
