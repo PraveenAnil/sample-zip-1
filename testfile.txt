@@ -1,0 +1,49 @@
+Edit /etc/default/grub 
+
+GRUB_CMDLINE_LINUX="rootdelay=300 console=ttyS0 earlyprintk=ttyS0 net.ifnames=0"
+
+_________
+Execute
+
+sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+
+_________
+
+Add Hyper-V modules both initrd and initramfs instructions (
+
+
+_________
+
+cp /boot/initramfs-$(uname -r).img /boot/initramfs-[latest kernel version ].img.bak 
+dracut -f -v /boot/initramfs-[latest kernel version ].img  [depending on the version of grub] 
+grub-mkconfig -o /boot/grub/grub.cfg 
+grub2-mkconfig -o /boot/grub2/grub.cfg 
+
+
+mv /boot/[initrd kernel] /boot/[initrd kernel]-old 
+mkinitrd /boot/initrd.img-[initrd kernel]-generic /boot/[initrd kernel]-generic-old 
+update-initramfs -c -k [initrd kernel] 
+update-grub
+
+sudo apt install walinuxagent cloud-init cloud-utils-growpart gdisk hyperv-daemons
+
+sudo systemctl enable waagent.service
+sudo systemctl enable cloud-init.service
+
+
+_______
+Modify /etc/waagent.conf
+
+ResourceDisk.Format=y
+ResourceDisk.Filesystem=ext4
+ResourceDisk.MountPoint=/mnt/resource
+ResourceDisk.EnableSwap=y
+ResourceDisk.SwapSizeMB=2048    ## NOTE: Set this to your desired size.
+
+
+_______
+
+sed -i 's/Provisioning.Agent=auto/Provisioning.Agent=cloud-init/g' /etc/waagent.conf
+sed -i 's/ResourceDisk.Format=y/ResourceDisk.Format=n/g' /etc/waagent.conf
+sed -i 's/ResourceDisk.EnableSwap=y/ResourceDisk.EnableSwap=n/g' /etc/waagent.conf
+
